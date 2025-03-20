@@ -1,0 +1,21 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3.13.7-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    # 添加插件安装步骤
+    volumes:
+      - ./rabbitmq/plugins/rabbitmq_delayed_message_exchange-3.13.0.ez:/plugins/rabbitmq_delayed_message_exchange-3.13.0.ez
+    command:
+      - bash
+      - -c
+      - |
+        rabbitmq-plugins enable rabbitmq_delayed_message_exchange --offline
+        rabbitmq-server
