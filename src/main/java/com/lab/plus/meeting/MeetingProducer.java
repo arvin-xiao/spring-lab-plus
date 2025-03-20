@@ -21,6 +21,7 @@ public class MeetingProducer {
             message.getMessageProperties().setHeader("x-delay", delay);
             return message;
         });
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>开始推送会议通知: " + meeting);
     }
 
     public static long calculateDelay(LocalDateTime meetingStartTime) {

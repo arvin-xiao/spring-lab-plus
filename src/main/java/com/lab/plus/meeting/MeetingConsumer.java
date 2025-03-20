@@ -8,6 +8,6 @@ public class MeetingConsumer {
     @RabbitListener(queues = RabbitMQConfig.QUEUE_NAME)
     public void receiveMeetingNotification(Meeting meeting) {
         // 模拟推送给订阅用户
-        System.out.println("+++++++++++++++++++++++>>>>>>>>>>>>>>推送会议通知: " + meeting);
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<接受会议通知>>>>>>>>>>>>>>>>>>>>: " + meeting);
     }
 }
