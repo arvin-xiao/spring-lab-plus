@@ -22,7 +22,7 @@ public class SpringLabPlusApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // 创建一个会议，开始时间为明天
-        LocalDateTime meetingStartTime = LocalDateTime.now().plusDays(1).plusSeconds(5);
+        LocalDateTime meetingStartTime = LocalDateTime.now().plusSeconds(60);
         meetingService.createMeeting("1", "重要会议", meetingStartTime);
     }
 }
