@@ -10,7 +10,7 @@
 
     <artifactId>graalvm-native</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>graalvm-native</name>
+    <name>spring-lab::graalvm-native</name>
     <description>graalvm-native</description>
 
     <properties>

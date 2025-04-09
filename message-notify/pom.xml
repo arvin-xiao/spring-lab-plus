@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>message-notify</artifactId>
+    <name>spring-lab::message-notify</name>
 
     <properties>
         <startClass>com.lab.plus.message.MessageNotifyApplication</startClass>
