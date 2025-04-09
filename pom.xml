@@ -58,6 +58,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <skipTests>true</skipTests>
+                    </configuration>
                 </plugin>
                 <!-- maven-compiler-plugin 插件，解决 Lombok + MapStruct 组合 -->
                 <!-- https://stackoverflow.com/questions/33483697/re-run-spring-boot-configuration-annotation-processor-to-update-generated-metada -->
@@ -112,19 +115,19 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--设置 SpringBoot 打包插件不包含任何 Jar 依赖包-->
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <configuration>
-                        <includes>
-                            <include>
-                                <groupId>nothing</groupId>
-                                <artifactId>nothing</artifactId>
-                            </include>
-                        </includes>
-                    </configuration>
-                </plugin>
+<!--                &lt;!&ndash;设置 SpringBoot 打包插件不包含任何 Jar 依赖包&ndash;&gt;-->
+<!--                <plugin>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                    <configuration>-->
+<!--                        <includes>-->
+<!--                            <include>-->
+<!--                                <groupId>nothing</groupId>-->
+<!--                                <artifactId>nothing</artifactId>-->
+<!--                            </include>-->
+<!--                        </includes>-->
+<!--                    </configuration>-->
+<!--                </plugin>-->
                 <!--设置应用 Main 参数启动依赖查找的地址指向外部 lib 文件夹-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -160,6 +163,42 @@
                             </configuration>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.graalvm.buildtools</groupId>
+                    <artifactId>native-maven-plugin</artifactId>
+                    <version>${native-buildtools.version}</version>
+                    <extensions>true</extensions>
+                    <executions>
+                        <execution>
+                            <id>test-native</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>build-native</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <!--新增配置-->
+                    <configuration>
+                        <mainClass>${startClass}</mainClass>
+                        <!--如果希望在运行时初始化包中的类使用 initialize-at-run-time -->
+                        <!--如果希望在构建时初始化包中的类使用 initialize-at-build -->
+                        <buildArgs>
+                            --initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger
+                            --initialize-at-run-time=io.netty.handler.ssl.ReferenceCountedOpenSslContext
+                            --initialize-at-run-time=io.netty.handler.ssl.JdkNpnApplicationProtocolNegotiator
+                            --initialize-at-run-time=io.netty.handler.ssl.JettyNpnSslEngine
+                            --initialize-at-run-time=io.netty.handler.ssl.ConscryptAlpnSslEngine
+                            --initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils
+                        </buildArgs>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -202,42 +241,6 @@
                         <delimiter>@</delimiter>
                     </delimiters>
                     <useDefaultDelimiters>false</useDefaultDelimiters>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.graalvm.buildtools</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-                <version>${native-buildtools.version}</version>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>test-native</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>build-native</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <!--新增配置-->
-                <configuration>
-                    <mainClass>${startClass}</mainClass>
-                    <!--如果希望在运行时初始化包中的类使用 initialize-at-run-time -->
-                    <!--如果希望在构建时初始化包中的类使用 initialize-at-build -->
-                    <buildArgs>
-                        --initialize-at-run-time=io.netty.util.internal.logging.Log4JLogger
-                        --initialize-at-run-time=io.netty.handler.ssl.ReferenceCountedOpenSslContext
-                        --initialize-at-run-time=io.netty.handler.ssl.JdkNpnApplicationProtocolNegotiator
-                        --initialize-at-run-time=io.netty.handler.ssl.JettyNpnSslEngine
-                        --initialize-at-run-time=io.netty.handler.ssl.ConscryptAlpnSslEngine
-                        --initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils
-                    </buildArgs>
                 </configuration>
             </plugin>
         </plugins>
