@@ -167,7 +167,6 @@
                 <plugin>
                     <groupId>org.graalvm.buildtools</groupId>
                     <artifactId>native-maven-plugin</artifactId>
-                    <version>${native-buildtools.version}</version>
                     <extensions>true</extensions>
                     <executions>
                         <execution>
